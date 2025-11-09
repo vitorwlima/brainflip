@@ -53,8 +53,8 @@ const CreatePage = () => {
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center p-4 md:px-6 md:py-24">
-        <header className="mx-auto flex w-full max-w-3xl flex-col items-center gap-5 rounded-[3rem] border border-white/25 bg-white/10 px-8 py-12 text-center shadow-[0_30px_90px_-35px_rgba(15,118,169,0.7)] backdrop-blur-2xl">
-          <ViewTransition name="create-game">
+        <ViewTransition name="page-block">
+          <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-5 rounded-[3rem] border border-white/25 bg-white/10 px-8 py-12 text-center shadow-[0_30px_90px_-35px_rgba(15,118,169,0.7)] backdrop-blur-2xl">
             <h1
               className={cn(
                 "text-3xl font-bold tracking-tight text-white drop-shadow-sm md:text-4xl lg:text-5xl",
@@ -63,12 +63,12 @@ const CreatePage = () => {
             >
               Create Game
             </h1>
-          </ViewTransition>
-          <p className="max-w-xl text-base text-sky-50/90 md:text-lg">
-            Set up a new match, invite your friends, and choose the challenge
-            that fits your vibe.
-          </p>
-        </header>
+            <p className="max-w-xl text-base text-sky-50/90 md:text-lg">
+              Set up a new match, invite your friends, and choose the challenge
+              that fits your vibe.
+            </p>
+          </div>
+        </ViewTransition>
 
         <form
           onSubmit={handleSubmit}

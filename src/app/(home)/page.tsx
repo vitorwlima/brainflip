@@ -13,7 +13,7 @@ const HomePage = () => {
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center p-4 md:px-6 md:py-24">
-        <header className="w-full">
+        <ViewTransition name="page-block">
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 md:gap-8 rounded-[3rem] border border-white/25 bg-white/10 p-6 md:p-12 text-center shadow-[0_30px_90px_-35px_rgba(15,118,169,0.7)] backdrop-blur-2xl">
             <h1
               className={cn(
@@ -31,17 +31,15 @@ const HomePage = () => {
               </p>
             </div>
           </div>
-        </header>
+        </ViewTransition>
 
         <div className="mt-14 flex w-full max-w-2xl flex-col items-center gap-5 sm:flex-row sm:items-stretch sm:justify-center">
-          <ViewTransition name="create-game">
-            <Link
-              href="/create"
-              className="w-full rounded-full bg-linear-to-r text-center from-emerald-400 via-emerald-500 to-emerald-600 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/40 transition-colors duration-300 hover:from-emerald-300 hover:via-emerald-400 hover:to-emerald-500 focus-visible:shadow-xl focus-visible:shadow-emerald-400/60 focus-visible:from-emerald-300 focus-visible:via-emerald-400 focus-visible:to-emerald-500 focus-visible:outline-none"
-            >
-              Create Game
-            </Link>
-          </ViewTransition>
+          <Link
+            href="/create"
+            className="w-full rounded-full bg-linear-to-r text-center from-emerald-400 via-emerald-500 to-emerald-600 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/40 transition-colors duration-300 hover:from-emerald-300 hover:via-emerald-400 hover:to-emerald-500 focus-visible:shadow-xl focus-visible:shadow-emerald-400/60 focus-visible:from-emerald-300 focus-visible:via-emerald-400 focus-visible:to-emerald-500 focus-visible:outline-none"
+          >
+            Create Game
+          </Link>
           <Link
             href="/join"
             className="rounded-full w-full border text-center border-white/60 bg-white/50 px-10 py-4 text-lg font-semibold text-sky-900 shadow-lg shadow-sky-500/20 transition-all duration-300 hover:bg-white/80 hover:shadow-xl hover:shadow-sky-400/60 focus-visible:bg-white/80 focus-visible:shadow-xl focus-visible:shadow-sky-400/60 focus-visible:outline-none"
