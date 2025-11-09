@@ -5,7 +5,7 @@ import { gabarito } from "@/fonts";
 
 export const metadata: Metadata = {
   title: "Brain Flip",
-  description: "Have fun with your friends at an exciting memory game.",
+  description: "Have fun with your friends in this exciting memory game.",
 };
 
 const RootLayout = ({

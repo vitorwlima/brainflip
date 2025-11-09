@@ -15,7 +15,7 @@ const HomePage = () => {
             Brain Flip
           </h1>
           <p className="text-lg text-gray-200">
-            Have fun with your friends at an exciting memory game.
+            Have fun with your friends in this exciting memory game.
           </p>
         </header>
       </div>
