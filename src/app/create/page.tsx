@@ -60,7 +60,7 @@ const CreatePage = () => {
             <ViewTransition name="page-title">
               <h1
                 className={cn(
-                  "text-3xl font-bold tracking-tight text-white drop-shadow-sm md:text-4xl lg:text-5xl",
+                  "text-3xl text-white drop-shadow-sm md:text-4xl lg:text-5xl",
                   dynaPuff.className
                 )}
               >

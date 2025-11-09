@@ -7,5 +7,5 @@ export const dynaPuff = DynaPuff({
 
 export const gabarito = Gabarito({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600", "700"],
 });

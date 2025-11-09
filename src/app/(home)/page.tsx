@@ -19,7 +19,7 @@ const HomePage = () => {
             <ViewTransition name="page-title">
               <h1
                 className={cn(
-                  "text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-sm lg:text-5xl xl:text-7xl",
+                  "text-3xl md:text-4xl text-white drop-shadow-sm lg:text-5xl xl:text-7xl",
                   dynaPuff.className
                 )}
               >

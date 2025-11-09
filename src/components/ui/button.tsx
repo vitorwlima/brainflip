@@ -49,7 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Component
         ref={ref}
         className={cn(
-          "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full text-center font-semibold tracking-tight transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-500/20 disabled:pointer-events-none disabled:opacity-60 disabled:cursor-not-allowed",
+          "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full text-center font-medium tracking-wide transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-500/20 disabled:pointer-events-none disabled:opacity-60 disabled:cursor-not-allowed",
           variantStyles[variant],
           sizeStyles[size],
           className
