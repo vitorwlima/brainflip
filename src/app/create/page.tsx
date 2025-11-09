@@ -1,50 +1,45 @@
 "use client";
 
-import * as Select from "@radix-ui/react-select";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { ViewTransition } from "react";
 
+import {
+  Select,
+  type SelectOption,
+} from "@/components/ui/select";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 
-type CategoryOption = {
-  value: string;
-  label: string;
-};
-
-type DifficultyOption = {
-  value: string;
-  label: string;
-  detail: string;
-};
-
-const categoryOptions: CategoryOption[] = [
+const categoryOptions: SelectOption[] = [
   { value: "classic", label: "Classic Deck" },
   { value: "animals", label: "Animals" },
   { value: "space", label: "Cosmic" },
   { value: "fruits", label: "Fruits" },
 ];
 
-const difficultyOptions: DifficultyOption[] = [
-  { value: "easy", label: "Easy", detail: "8 cards · Slow flips" },
-  { value: "medium", label: "Medium", detail: "16 cards · Balanced" },
-  { value: "hard", label: "Hard", detail: "24 cards · Speedy play" },
+const difficultyOptions: SelectOption[] = [
+  {
+    value: "easy",
+    label: "Easy",
+    description: "32 cards · 16 pairs",
+  },
+  {
+    value: "medium",
+    label: "Medium",
+    description: "48 cards · 24 pairs",
+  },
+  { value: "hard", label: "Hard", description: "64 cards · 32 pairs" },
+  {
+    value: "extreme",
+    label: "Extreme",
+    description: "80 cards · 40 pairs",
+  },
 ];
-
-const selectTriggerClasses =
-  "flex w-full items-center justify-between gap-3 rounded-full border border-white/30 bg-white/10 px-5 py-3 text-left text-white shadow-lg shadow-sky-900/10 transition-all duration-200 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-500/40";
-
-const selectContentClasses =
-  "z-50 overflow-hidden rounded-3xl border border-white/25 bg-sky-950/95 backdrop-blur-xl shadow-[0_20px_60px_-25px_rgba(15,118,169,0.75)]";
-
-const selectItemClasses =
-  "relative cursor-pointer select-none rounded-2xl px-4 py-3 text-sm text-sky-100 outline-none transition-colors data-[highlighted]:bg-white/15";
 
 const CreatePage = () => {
   const [username, setUsername] = useState("");
-  const [category, setCategory] = useState<CategoryOption["value"]>();
-  const [difficulty, setDifficulty] = useState<DifficultyOption["value"]>();
+  const [category, setCategory] = useState<SelectOption["value"]>();
+  const [difficulty, setDifficulty] = useState<SelectOption["value"]>();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -103,91 +98,24 @@ const CreatePage = () => {
                 label="Category"
                 description="Pick a theme to match cards."
               >
-                <Select.Root value={category} onValueChange={setCategory}>
-                  <Select.Trigger className={selectTriggerClasses}>
-                    <Select.Value placeholder="Choose category" />
-                    <Select.Icon className="text-white/80">
-                      <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                    </Select.Icon>
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Content
-                      className={selectContentClasses}
-                      position="popper"
-                      sideOffset={12}
-                    >
-                      <Select.ScrollUpButton className="flex items-center justify-center bg-white/5 py-1 text-white/80">
-                        <ChevronUp className="h-4 w-4" aria-hidden="true" />
-                      </Select.ScrollUpButton>
-                      <Select.Viewport className="flex flex-col gap-1 p-3">
-                        {categoryOptions.map((option) => (
-                          <Select.Item
-                            key={option.value}
-                            value={option.value}
-                            className={selectItemClasses}
-                          >
-                            <Select.ItemText>{option.label}</Select.ItemText>
-                            <Select.ItemIndicator className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-300">
-                              <Check className="h-4 w-4" aria-hidden="true" />
-                            </Select.ItemIndicator>
-                          </Select.Item>
-                        ))}
-                      </Select.Viewport>
-                      <Select.ScrollDownButton className="flex items-center justify-center bg-white/5 py-1 text-white/80">
-                        <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                      </Select.ScrollDownButton>
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
+                <Select
+                  value={category}
+                  onValueChange={setCategory}
+                  placeholder="Choose category"
+                  options={categoryOptions}
+                />
               </Fieldset>
 
               <Fieldset
                 label="Difficulty"
                 description="Select the number of cards."
               >
-                <Select.Root value={difficulty} onValueChange={setDifficulty}>
-                  <Select.Trigger className={selectTriggerClasses}>
-                    <Select.Value placeholder="Choose difficulty" />
-                    <Select.Icon className="text-white/80">
-                      <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                    </Select.Icon>
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Content
-                      className={selectContentClasses}
-                      position="popper"
-                      sideOffset={12}
-                    >
-                      <Select.ScrollUpButton className="flex items-center justify-center bg-white/5 py-1 text-white/80">
-                        <ChevronUp className="h-4 w-4" aria-hidden="true" />
-                      </Select.ScrollUpButton>
-                      <Select.Viewport className="flex flex-col gap-1 p-3">
-                        {difficultyOptions.map((option) => (
-                          <Select.Item
-                            key={option.value}
-                            value={option.value}
-                            className={selectItemClasses}
-                          >
-                            <Select.ItemText>
-                              <span className="block text-sm font-semibold">
-                                {option.label}
-                              </span>
-                              <span className="block text-xs text-sky-300/80">
-                                {option.detail}
-                              </span>
-                            </Select.ItemText>
-                            <Select.ItemIndicator className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-300">
-                              <Check className="h-4 w-4" aria-hidden="true" />
-                            </Select.ItemIndicator>
-                          </Select.Item>
-                        ))}
-                      </Select.Viewport>
-                      <Select.ScrollDownButton className="flex items-center justify-center bg-white/5 py-1 text-white/80">
-                        <ChevronDown className="h-4 w-4" aria-hidden="true" />
-                      </Select.ScrollDownButton>
-                    </Select.Content>
-                  </Select.Portal>
-                </Select.Root>
+                <Select
+                  value={difficulty}
+                  onValueChange={setDifficulty}
+                  placeholder="Choose difficulty"
+                  options={difficultyOptions}
+                />
               </Fieldset>
             </div>
 
