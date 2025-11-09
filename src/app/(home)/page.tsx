@@ -16,14 +16,16 @@ const HomePage = () => {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center p-4 md:px-6 md:py-24">
         <ViewTransition name="page-block">
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 md:gap-8 rounded-[3rem] border border-white/25 bg-white/10 p-6 md:p-12 text-center shadow-[0_30px_90px_-35px_rgba(15,118,169,0.7)] backdrop-blur-2xl">
-            <h1
-              className={cn(
-                "text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-sm lg:text-5xl xl:text-7xl",
-                dynaPuff.className
-              )}
-            >
-              Brain Flip
-            </h1>
+            <ViewTransition name="page-title">
+              <h1
+                className={cn(
+                  "text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-sm lg:text-5xl xl:text-7xl",
+                  dynaPuff.className
+                )}
+              >
+                Brain Flip
+              </h1>
+            </ViewTransition>
             <div className="flex max-w-2xl flex-col items-center gap-6 text-base text-sky-50/90 md:text-lg">
               <span className="h-px w-24 rounded-full bg-white/40" />
               <p>
