@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { ViewTransition } from "react";
 
+import { Button } from "@/components/ui/button";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { Fieldset } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
@@ -125,18 +126,22 @@ const CreatePage = () => {
             </div>
 
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between sm:gap-6">
-              <button
+              <Button
                 type="button"
-                className="w-full rounded-full border border-white/40 bg-white/20 px-8 py-3 text-base font-semibold text-white shadow-md shadow-sky-900/20 transition-colors duration-200 hover:bg-white/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/50 sm:w-auto"
+                variant="secondary"
+                size="md"
+                className="w-full sm:w-auto"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className="w-full rounded-full bg-linear-to-r from-emerald-400 via-emerald-500 to-emerald-600 px-10 py-3 text-base font-semibold text-white shadow-lg shadow-emerald-500/40 transition-colors duration-200 hover:from-emerald-300 hover:via-emerald-400 hover:to-emerald-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300/60 sm:w-auto"
+                variant="primary"
+                size="md"
+                className="w-full sm:w-auto"
               >
                 Create Lobby
-              </button>
+              </Button>
             </div>
           </div>
         </form>

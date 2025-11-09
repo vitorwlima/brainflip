@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 import Link from "next/link";
@@ -34,24 +35,30 @@ const HomePage = () => {
         </ViewTransition>
 
         <div className="mt-14 flex w-full max-w-2xl flex-col items-center gap-5 sm:flex-row sm:items-stretch sm:justify-center">
-          <Link
-            href="/create"
-            className="w-full rounded-full bg-linear-to-r text-center from-emerald-400 via-emerald-500 to-emerald-600 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/40 transition-colors duration-300 hover:from-emerald-300 hover:via-emerald-400 hover:to-emerald-500 focus-visible:shadow-xl focus-visible:shadow-emerald-400/60 focus-visible:from-emerald-300 focus-visible:via-emerald-400 focus-visible:to-emerald-500 focus-visible:outline-none"
+          <Button
+            asChild
+            variant="primary"
+            size="lg"
+            className="w-full text-center sm:w-auto"
           >
-            Create Game
-          </Link>
-          <Link
-            href="/join"
-            className="rounded-full w-full border text-center border-white/60 bg-white/50 px-10 py-4 text-lg font-semibold text-sky-900 shadow-lg shadow-sky-500/20 transition-all duration-300 hover:bg-white/80 hover:shadow-xl hover:shadow-sky-400/60 focus-visible:bg-white/80 focus-visible:shadow-xl focus-visible:shadow-sky-400/60 focus-visible:outline-none"
+            <Link href="/create">Create Game</Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full text-center sm:w-auto"
           >
-            Join Room
-          </Link>
-          <Link
-            href="/about"
-            className="rounded-full w-full text-center bg-sky-900/80 px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-sky-900/50 transition-all duration-300 hover:bg-sky-900 focus-visible:bg-sky-900 focus-visible:outline-none"
+            <Link href="/join">Join Room</Link>
+          </Button>
+          <Button
+            asChild
+            variant="dark"
+            size="lg"
+            className="w-full text-center sm:w-auto"
           >
-            Know More
-          </Link>
+            <Link href="/about">Know More</Link>
+          </Button>
         </div>
       </div>
     </main>
