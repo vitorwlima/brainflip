@@ -9,6 +9,7 @@ import { Fieldset } from "@/components/ui/fieldset";
 import { Input } from "@/components/ui/input";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
+import Link from "next/link";
 
 const categoryOptions: SelectOption[] = [
   { value: "classic", label: "Classic Deck" },
@@ -131,16 +132,18 @@ const CreatePage = () => {
                 variant="secondary"
                 size="md"
                 className="w-full sm:w-auto"
+                asChild
               >
-                Cancel
+                <Link href="/">Cancel</Link>
               </Button>
               <Button
                 type="submit"
                 variant="primary"
                 size="md"
                 className="w-full sm:w-auto"
+                asChild
               >
-                Create Lobby
+                <Link href="/">Create Lobby</Link>
               </Button>
             </div>
           </div>
