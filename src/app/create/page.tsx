@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent } from "react";
 import { ViewTransition } from "react";
 
-import {
-  Select,
-  type SelectOption,
-} from "@/components/ui/select";
+import { Select, type SelectOption } from "@/components/ui/select";
+import { Fieldset } from "@/components/ui/fieldset";
+import { Input } from "@/components/ui/input";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 
@@ -83,13 +82,12 @@ const CreatePage = () => {
               >
                 Username
               </label>
-              <input
+              <Input
                 id="username"
                 name="username"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
-                placeholder="How should players call you?"
-                className="w-full rounded-full border border-white/30 bg-white/10 px-5 py-3 text-base text-white placeholder:text-white/60 shadow-lg shadow-sky-900/10 transition-all duration-200 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-sky-500/40"
+                placeholder="How should other players call you?"
               />
             </div>
 
@@ -144,28 +142,6 @@ const CreatePage = () => {
         </form>
       </div>
     </main>
-  );
-};
-
-type FieldsetProps = {
-  label: string;
-  description?: string;
-  children: ReactNode;
-};
-
-const Fieldset = ({ label, description, children }: FieldsetProps) => {
-  return (
-    <fieldset className="flex flex-col gap-3">
-      <legend className="text-sm font-semibold uppercase tracking-wider text-white/90">
-        {label}
-      </legend>
-      {description ? (
-        <p className="text-xs uppercase tracking-wide text-white/60">
-          {description}
-        </p>
-      ) : null}
-      {children}
-    </fieldset>
   );
 };
 
