@@ -10,40 +10,38 @@ import { Input } from "@/components/ui/input";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 import Link from "next/link";
-
-const categoryOptions: SelectOption[] = [
-  { value: "classic", label: "Classic Deck" },
-  { value: "animals", label: "Animals" },
-  { value: "space", label: "Cosmic" },
-  { value: "fruits", label: "Fruits" },
-];
-
-const difficultyOptions: SelectOption[] = [
-  {
-    value: "easy",
-    label: "Easy",
-    description: "32 cards · 16 pairs",
-  },
-  {
-    value: "medium",
-    label: "Medium",
-    description: "48 cards · 24 pairs",
-  },
-  { value: "hard", label: "Hard", description: "64 cards · 32 pairs" },
-  {
-    value: "extreme",
-    label: "Extreme",
-    description: "80 cards · 40 pairs",
-  },
-];
+import { categoryOptions, difficultyOptions } from "@/data/game-options";
+import { useMutation } from "convex/react";
+import { api } from "@convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { useUserId } from "@/lib/utils/user-id";
 
 const CreatePage = () => {
   const [username, setUsername] = useState("");
   const [category, setCategory] = useState<SelectOption["value"]>();
   const [difficulty, setDifficulty] = useState<SelectOption["value"]>();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  const createGame = useMutation(api.games.createGame);
+  const userId = useUserId();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!username || !category || !difficulty || !userId) {
+      return;
+    }
+
+    const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    await createGame({
+      userId,
+      username,
+      category,
+      difficulty,
+      roomCode,
+    });
+
+    router.push(`/game/${roomCode}`);
   };
 
   return (
@@ -143,9 +141,9 @@ const CreatePage = () => {
                 variant="primary"
                 size="md"
                 className="w-full sm:w-auto"
-                asChild
+                disabled={!userId}
               >
-                <Link href="/">Create Lobby</Link>
+                Create Lobby
               </Button>
             </div>
           </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils/classname";
 import { gabarito } from "@/fonts";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Brain Flip",
@@ -15,7 +16,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={cn("antialiased", gabarito.className)}>{children}</body>
+      <body className={cn("antialiased", gabarito.className)}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 };

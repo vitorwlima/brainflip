@@ -8,13 +8,32 @@ import { Input } from "@/components/ui/input";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 import Link from "next/link";
+import { useMutation } from "convex/react";
+import { api } from "@convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { useUserId } from "@/lib/utils/user-id";
 
 const JoinPage = () => {
   const [username, setUsername] = useState("");
   const [roomCode, setRoomCode] = useState("");
+  const userId = useUserId();
+  const router = useRouter();
+  const joinGame = useMutation(api.games.joinGame);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!username || !roomCode || !userId) {
+      return;
+    }
+
+    await joinGame({
+      roomCode,
+      username,
+      playerId: userId,
+    });
+
+    router.push(`/game/${roomCode}`);
   };
 
   return (

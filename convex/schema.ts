@@ -9,7 +9,7 @@ const schema = defineSchema({
       v.literal("finished")
     ),
     category: v.string(),
-    difficulty: v.number(),
+    difficulty: v.string(),
     playerToPlay: v.string(),
     roomCode: v.string(),
     players: v.array(
@@ -21,7 +21,7 @@ const schema = defineSchema({
     ),
     createdAt: v.number(),
     updatedAt: v.number(),
-  }),
+  }).index("by_roomCode", ["roomCode"]),
 });
 
 export default schema;
