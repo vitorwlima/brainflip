@@ -3,7 +3,7 @@
 ### Most Important
 
 - [ ] finish testing the whole lobby and online experience
-  - [ ] joining through the link has to work (todo: IF your user id is not in the game, you are prompted to insert user name which will trigger the join function)
+  - [x] joining through the link has to work (todo: IF your user id is not in the game, you are prompted to insert user name which will trigger the join function)
   - [ ] disconnects
   - [ ] rejoins
   - [ ] host can edit settings (have to save who is the host in db) (selects need loading state or at least disabled state clearer)
