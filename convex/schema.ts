@@ -17,6 +17,7 @@ const schema = defineSchema({
         id: v.string(),
         username: v.string(),
         score: v.number(),
+        isHost: v.boolean(),
       })
     ),
     createdAt: v.number(),

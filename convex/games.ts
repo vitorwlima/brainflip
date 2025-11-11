@@ -25,7 +25,9 @@ export const createGame = mutation({
       difficulty: args.difficulty,
       roomCode: args.roomCode,
       playerToPlay: args.userId,
-      players: [{ id: args.userId, username: args.username, score: 0 }],
+      players: [
+        { id: args.userId, username: args.username, isHost: true, score: 0 },
+      ],
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
@@ -115,7 +117,7 @@ export const joinGame = mutation({
     await ctx.db.patch(game._id, {
       players: [
         ...game.players,
-        { id: args.playerId, username: args.username, score: 0 },
+        { id: args.playerId, username: args.username, score: 0, isHost: false },
       ],
     });
 
