@@ -147,7 +147,7 @@ const CreatePage = () => {
                   variant="primary"
                   size="md"
                   className="w-full sm:w-auto"
-                  disabled={!userId}
+                  disabled={isPending}
                 >
                   <ButtonLoader isLoading={isPending}>
                     Create Lobby

@@ -13,15 +13,18 @@ import { Loading } from "./loading";
 import { GameNotFound } from "./game-not-found";
 import { PlayerNotInGame } from "./player-not-in-game";
 import { Button } from "@/components/ui/button";
+import { ButtonLoader } from "@/components/ui/button-loader";
 
 export const LobbyView = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const userId = useUserId();
 
-  const [isPending, startTransition] = useTransition();
+  const [isSettingsPending, startSettingsTransition] = useTransition();
+  const [isStartGamePending, startStartGameTransition] = useTransition();
 
   const game = useQuery(api.games.getGameByRoomCode, { roomCode });
   const updateGameSettings = useMutation(api.games.updateGameSettings);
+  const startGame = useMutation(api.games.startGame);
 
   const player = game?.players.find((player) => player.id === userId);
   const isPlayerInGame = Boolean(player);
@@ -37,13 +40,23 @@ export const LobbyView = () => {
         return;
       }
 
-      startTransition(() => {
+      startSettingsTransition(() => {
         updateGameSettings({
           gameId: game._id,
           [field]: value,
         });
       });
     };
+
+  const handleStartGame = () => {
+    if (!game?._id) {
+      return;
+    }
+
+    startStartGameTransition(() => {
+      startGame({ gameId: game._id });
+    });
+  };
 
   const isLoading = game === undefined;
   const hasGame = !isLoading && game !== null;
@@ -82,7 +95,7 @@ export const LobbyView = () => {
                       onValueChange={handleSelectChange("category")}
                       placeholder="Choose category"
                       options={categoryOptions}
-                      disabled={isPending || !isPlayerTheHost}
+                      disabled={isSettingsPending || !isPlayerTheHost}
                     />
                   </Fieldset>
                   <Fieldset
@@ -94,7 +107,7 @@ export const LobbyView = () => {
                       onValueChange={handleSelectChange("difficulty")}
                       placeholder="Choose difficulty"
                       options={difficultyOptions}
-                      disabled={isPending || !isPlayerTheHost}
+                      disabled={isSettingsPending || !isPlayerTheHost}
                     />
                   </Fieldset>
                 </div>
@@ -137,8 +150,15 @@ export const LobbyView = () => {
 
                 {isPlayerTheHost && (
                   <div className="flex justify-end">
-                    <Button variant="primary" size="md" disabled={isPending}>
-                      Start Game
+                    <Button
+                      variant="primary"
+                      size="md"
+                      onClick={handleStartGame}
+                      disabled={isStartGamePending}
+                    >
+                      <ButtonLoader isLoading={isStartGamePending}>
+                        Start Game
+                      </ButtonLoader>
                     </Button>
                   </div>
                 )}

@@ -36,6 +36,18 @@ export const createGame = mutation({
   },
 });
 
+export const startGame = mutation({
+  args: {
+    gameId: v.id("games"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.patch(args.gameId, {
+      status: "in_game",
+      updatedAt: Date.now(),
+    });
+  },
+});
+
 export const getGameByRoomCode = query({
   args: {
     roomCode: v.string(),
@@ -119,6 +131,7 @@ export const joinGame = mutation({
         ...game.players,
         { id: args.playerId, username: args.username, score: 0, isHost: false },
       ],
+      updatedAt: Date.now(),
     });
 
     return game;
