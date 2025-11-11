@@ -201,26 +201,15 @@ const GamePage = () => {
                         key={player.id}
                         className="flex items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/12 px-5 py-4 text-white/90 shadow-[0_20px_60px_-35px_rgba(15,118,169,0.65)]"
                       >
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold uppercase tracking-widest">
-                            {player.username}
+                        <span className="text-sm font-semibold uppercase tracking-widest">
+                          {player.username}
+                        </span>
+
+                        {player.id === userId ? (
+                          <span className="rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/85">
+                            You
                           </span>
-                          <span className="text-xs uppercase tracking-[0.25em] text-white/60">
-                            Score: {player.score}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {game.playerToPlay === player.id ? (
-                            <span className="rounded-full border border-emerald-300/70 bg-emerald-300/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-emerald-100">
-                              Playing
-                            </span>
-                          ) : null}
-                          {userId && player.id === userId ? (
-                            <span className="rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/85">
-                              You
-                            </span>
-                          ) : null}
-                        </div>
+                        ) : null}
                       </li>
                     ))}
                   </ul>
