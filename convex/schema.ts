@@ -20,6 +20,16 @@ const schema = defineSchema({
         isHost: v.boolean(),
       })
     ),
+    // cards: v.array(
+    //   v.object({
+    //     value: v.string(),
+    //     status: v.union(
+    //       v.literal("hidden"),
+    //       v.literal("flipped"),
+    //       v.literal("matched")
+    //     ),
+    //   })
+    // ),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_roomCode", ["roomCode"]),

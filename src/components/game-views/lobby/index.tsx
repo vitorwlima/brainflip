@@ -4,7 +4,7 @@ import { useUserId } from "@/lib/utils/user-id";
 import { api } from "@convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { useParams } from "next/navigation";
-import { useTransition } from "react";
+import { useTransition, ViewTransition } from "react";
 import { Select, SelectOption } from "@/components/ui/select";
 import { Fieldset } from "@/components/ui/fieldset";
 import { categoryOptions, difficultyOptions } from "@/data/game-options";
@@ -59,91 +59,93 @@ export const LobbyView = () => {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center p-4 md:px-6 md:py-24">
         <PageHeader roomCode={roomCode} />
 
-        <section className="mt-12 flex w-full max-w-4xl flex-col gap-10 rounded-[2.5rem] border border-white/25 bg-white/12 p-8 shadow-[0_40px_120px_-45px_rgba(15,118,169,0.8)] backdrop-blur-2xl sm:p-10">
-          <Loading show={isLoading} />
+        <ViewTransition name="page-content">
+          <section className="mt-12 flex w-full max-w-4xl flex-col gap-10 rounded-[2.5rem] border border-white/25 bg-white/12 p-8 shadow-[0_40px_120px_-45px_rgba(15,118,169,0.8)] backdrop-blur-2xl sm:p-10">
+            <Loading show={isLoading} />
 
-          <GameNotFound roomCode={roomCode} show={!isLoading && !hasGame} />
+            <GameNotFound roomCode={roomCode} show={!isLoading && !hasGame} />
 
-          <PlayerNotInGame
-            roomCode={roomCode}
-            show={!isLoading && hasGame && !isPlayerInGame}
-          />
+            <PlayerNotInGame
+              roomCode={roomCode}
+              show={!isLoading && hasGame && !isPlayerInGame}
+            />
 
-          {hasGame && isPlayerInGame ? (
-            <>
-              <div className="grid gap-8 lg:grid-cols-2">
-                <Fieldset
-                  label="Category"
-                  description="Pick the deck theme everyone will play with."
-                >
-                  <Select
-                    value={game.category}
-                    onValueChange={handleSelectChange("category")}
-                    placeholder="Choose category"
-                    options={categoryOptions}
-                    disabled={isPending || !isPlayerTheHost}
-                  />
-                </Fieldset>
-                <Fieldset
-                  label="Difficulty"
-                  description="Choose how many cards the board will have."
-                >
-                  <Select
-                    value={game.difficulty}
-                    onValueChange={handleSelectChange("difficulty")}
-                    placeholder="Choose difficulty"
-                    options={difficultyOptions}
-                    disabled={isPending || !isPlayerTheHost}
-                  />
-                </Fieldset>
-              </div>
-
-              <div className="flex flex-col gap-5 rounded-3xl border border-white/30 bg-white/10 p-6">
-                <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <h2 className="text-lg font-semibold uppercase tracking-widest text-white/80">
-                    Players in Lobby
-                  </h2>
-                  <span className="rounded-full border border-white/40 bg-white/15 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/70">
-                    {game.players.length}{" "}
-                    {game.players.length === 1 ? "Player" : "Players"}
-                  </span>
+            {hasGame && isPlayerInGame ? (
+              <>
+                <div className="grid gap-8 lg:grid-cols-2">
+                  <Fieldset
+                    label="Category"
+                    description="Pick the deck theme everyone will play with."
+                  >
+                    <Select
+                      value={game.category}
+                      onValueChange={handleSelectChange("category")}
+                      placeholder="Choose category"
+                      options={categoryOptions}
+                      disabled={isPending || !isPlayerTheHost}
+                    />
+                  </Fieldset>
+                  <Fieldset
+                    label="Difficulty"
+                    description="Choose how many cards the board will have."
+                  >
+                    <Select
+                      value={game.difficulty}
+                      onValueChange={handleSelectChange("difficulty")}
+                      placeholder="Choose difficulty"
+                      options={difficultyOptions}
+                      disabled={isPending || !isPlayerTheHost}
+                    />
+                  </Fieldset>
                 </div>
-                {game.players.length === 0 ? (
-                  <div className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-10 text-sm uppercase tracking-[0.25em] text-white/60">
-                    Waiting for players to join…
+
+                <div className="flex flex-col gap-5 rounded-3xl border border-white/30 bg-white/10 p-6">
+                  <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <h2 className="text-lg font-semibold uppercase tracking-widest text-white/80">
+                      Players in Lobby
+                    </h2>
+                    <span className="rounded-full border border-white/40 bg-white/15 px-4 py-1 text-xs uppercase tracking-[0.3em] text-white/70">
+                      {game.players.length}{" "}
+                      {game.players.length === 1 ? "Player" : "Players"}
+                    </span>
                   </div>
-                ) : (
-                  <ul className="grid gap-4 sm:grid-cols-2">
-                    {game.players.map((player) => (
-                      <li
-                        key={player.id}
-                        className="flex min-w-0 items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/12 px-5 py-4 text-white/90 shadow-[0_20px_60px_-35px_rgba(15,118,169,0.65)]"
-                      >
-                        <span className="flex-1 truncate text-sm font-semibold uppercase tracking-widest">
-                          {player.username}
-                        </span>
-
-                        {player.id === userId ? (
-                          <span className="rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/85">
-                            You
+                  {game.players.length === 0 ? (
+                    <div className="flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-10 text-sm uppercase tracking-[0.25em] text-white/60">
+                      Waiting for players to join…
+                    </div>
+                  ) : (
+                    <ul className="grid gap-4 sm:grid-cols-2">
+                      {game.players.map((player) => (
+                        <li
+                          key={player.id}
+                          className="flex min-w-0 items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/12 px-5 py-4 text-white/90 shadow-[0_20px_60px_-35px_rgba(15,118,169,0.65)]"
+                        >
+                          <span className="flex-1 truncate text-sm font-semibold uppercase tracking-widest">
+                            {player.username}
                           </span>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
 
-              {isPlayerTheHost && (
-                <div className="flex justify-end">
-                  <Button variant="primary" size="md" disabled={isPending}>
-                    Start Game
-                  </Button>
+                          {player.id === userId ? (
+                            <span className="rounded-full border border-white/35 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/85">
+                              You
+                            </span>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              )}
-            </>
-          ) : null}
-        </section>
+
+                {isPlayerTheHost && (
+                  <div className="flex justify-end">
+                    <Button variant="primary" size="md" disabled={isPending}>
+                      Start Game
+                    </Button>
+                  </div>
+                )}
+              </>
+            ) : null}
+          </section>
+        </ViewTransition>
       </div>
     </main>
   );
