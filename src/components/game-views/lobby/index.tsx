@@ -12,6 +12,7 @@ import { PageHeader } from "./page-header";
 import { Loading } from "./loading";
 import { GameNotFound } from "./game-not-found";
 import { PlayerNotInGame } from "./player-not-in-game";
+import { Button } from "@/components/ui/button";
 
 export const LobbyView = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -22,7 +23,9 @@ export const LobbyView = () => {
   const game = useQuery(api.games.getGameByRoomCode, { roomCode });
   const updateGameSettings = useMutation(api.games.updateGameSettings);
 
-  const isPlayerInGame = !!game?.players.some((player) => player.id === userId);
+  const player = game?.players.find((player) => player.id === userId);
+  const isPlayerInGame = Boolean(player);
+  const isPlayerTheHost = Boolean(player?.isHost);
 
   const handleSelectChange =
     (field: "category" | "difficulty") => (value: SelectOption["value"]) => {
@@ -78,7 +81,7 @@ export const LobbyView = () => {
                     onValueChange={handleSelectChange("category")}
                     placeholder="Choose category"
                     options={categoryOptions}
-                    disabled={isPending}
+                    disabled={isPending || !isPlayerTheHost}
                   />
                 </Fieldset>
                 <Fieldset
@@ -90,7 +93,7 @@ export const LobbyView = () => {
                     onValueChange={handleSelectChange("difficulty")}
                     placeholder="Choose difficulty"
                     options={difficultyOptions}
-                    disabled={isPending}
+                    disabled={isPending || !isPlayerTheHost}
                   />
                 </Fieldset>
               </div>
@@ -130,6 +133,14 @@ export const LobbyView = () => {
                   </ul>
                 )}
               </div>
+
+              {isPlayerTheHost && (
+                <div className="flex justify-end">
+                  <Button variant="primary" size="md" disabled={isPending}>
+                    Start Game
+                  </Button>
+                </div>
+              )}
             </>
           ) : null}
         </section>
