@@ -11,6 +11,8 @@
   - [ ] host can kick people (not necessary for MVP)
   - [x] host can start the game (that component is only the lobby, separate that into its own comp)
 
+- [ ] generate roomcode on the server side and make sure its unique
+
 ### UX/UI
 
 - [ ] after mvp done, adjust cringe copy

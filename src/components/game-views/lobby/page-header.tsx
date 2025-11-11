@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { ButtonCheck } from "@/components/ui/button-check";
 import { dynaPuff } from "@/fonts";
 import { cn } from "@/lib/utils/classname";
 import { useEffect, useState, ViewTransition } from "react";
 
 type Props = {
   roomCode: string;
-}
+};
 
 export const PageHeader = ({ roomCode }: Props) => {
   const [copiedType, setCopiedType] = useState<"code" | "link" | null>(null);
@@ -69,7 +70,7 @@ export const PageHeader = ({ roomCode }: Props) => {
               size="sm"
               onClick={() => handleCopy(roomCode, "code")}
             >
-              {copiedType === "code" ? "Copied!" : "Copy Code"}
+              <ButtonCheck show={copiedType === "code"}>Copy Code</ButtonCheck>
             </Button>
             <Button
               variant="outline"
@@ -81,7 +82,9 @@ export const PageHeader = ({ roomCode }: Props) => {
                 )
               }
             >
-              {copiedType === "link" ? "Link Copied!" : "Copy Invite Link"}
+              <ButtonCheck show={copiedType === "link"}>
+                Copy Invite Link
+              </ButtonCheck>
             </Button>
           </div>
         </div>

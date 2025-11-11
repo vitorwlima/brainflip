@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { ViewTransition } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { useMutation } from "convex/react";
 import { api } from "@convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { useUserId } from "@/lib/utils/user-id";
+import { ButtonLoader } from "@/components/ui/button-loader";
 
 const CreatePage = () => {
   const [username, setUsername] = useState("");
@@ -25,6 +26,8 @@ const CreatePage = () => {
   const createGame = useMutation(api.games.createGame);
   const userId = useUserId();
 
+  const [isPending, startTransition] = useTransition();
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!username || !category || !difficulty || !userId) {
@@ -33,15 +36,17 @@ const CreatePage = () => {
 
     const roomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    await createGame({
-      userId,
-      username,
-      category,
-      difficulty,
-      roomCode,
-    });
+    startTransition(async () => {
+      await createGame({
+        userId,
+        username,
+        category,
+        difficulty,
+        roomCode,
+      });
 
-    router.push(`/game/${roomCode}`);
+      router.push(`/game/${roomCode}`);
+    });
   };
 
   return (
@@ -143,7 +148,7 @@ const CreatePage = () => {
                 className="w-full sm:w-auto"
                 disabled={!userId}
               >
-                Create Lobby
+                <ButtonLoader isLoading={isPending}>Create Lobby</ButtonLoader>
               </Button>
             </div>
           </div>

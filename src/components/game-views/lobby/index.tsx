@@ -117,9 +117,9 @@ export const LobbyView = () => {
                     {game.players.map((player) => (
                       <li
                         key={player.id}
-                        className="flex items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/12 px-5 py-4 text-white/90 shadow-[0_20px_60px_-35px_rgba(15,118,169,0.65)]"
+                        className="flex min-w-0 items-center justify-between gap-4 rounded-2xl border border-white/25 bg-white/12 px-5 py-4 text-white/90 shadow-[0_20px_60px_-35px_rgba(15,118,169,0.65)]"
                       >
-                        <span className="text-sm font-semibold uppercase tracking-widest">
+                        <span className="flex-1 truncate text-sm font-semibold uppercase tracking-widest">
                           {player.username}
                         </span>
 
