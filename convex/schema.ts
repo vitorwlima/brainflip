@@ -1,4 +1,4 @@
-import { defineSchema, defineTable } from "convex/server";
+import { DataModelFromSchemaDefinition, defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const schema = defineSchema({
@@ -35,5 +35,8 @@ const schema = defineSchema({
     updatedAt: v.number(),
   }).index("by_roomCode", ["roomCode"]),
 });
+
+type Schema = DataModelFromSchemaDefinition<typeof schema>;
+export type Game = Schema["games"]["document"];
 
 export default schema;

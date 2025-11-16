@@ -6,6 +6,7 @@ import { api } from "@convex/_generated/api";
 import { useParams } from "next/navigation";
 import { LobbyView } from "@/components/game-views/lobby";
 import { InGameView } from "@/components/game-views/in-game";
+import { FinishedView } from "@/components/game-views/finished";
 
 const GamePage = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -17,6 +18,10 @@ const GamePage = () => {
 
   if (game.status === "in_game") {
     return <InGameView />;
+  }
+
+  if (game.status === "finished") {
+    return <FinishedView game={game} />;
   }
 
   return null;
