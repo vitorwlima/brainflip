@@ -1,5 +1,7 @@
+import { shuffle } from "../src/lib/utils/shuffle";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { api } from "./_generated/api";
 
 export const getGame = query({
   args: {
@@ -19,6 +21,25 @@ export const createGame = mutation({
     userId: v.string(),
   },
   handler: async (ctx, args) => {
+    const numberOfPairs =
+      args.difficulty === "easy"
+        ? 32
+        : args.difficulty === "medium"
+        ? 48
+        : args.difficulty === "hard"
+        ? 64
+        : 80;
+
+    const pairs = Array.from({ length: numberOfPairs / 2 }, (_, index) => ({
+      value: (index + 1).toString(),
+      status: "hidden" as const,
+    }));
+
+    const cards = shuffle([...pairs, ...pairs]).map((card) => ({
+      ...card,
+      id: crypto.randomUUID(),
+    }));
+
     const game = await ctx.db.insert("games", {
       status: "lobby",
       category: args.category,
@@ -28,6 +49,7 @@ export const createGame = mutation({
       players: [
         { id: args.userId, username: args.username, isHost: true, score: 0 },
       ],
+      cards,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
@@ -135,5 +157,138 @@ export const joinGame = mutation({
     });
 
     return game;
+  },
+});
+
+export const flipCard = mutation({
+  args: {
+    gameId: v.id("games"),
+    cardId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const game = await ctx.db.get(args.gameId);
+
+    if (!game) {
+      throw new Error("Game not found");
+    }
+
+    const flippedCard = game.cards.find((card) => card.id === args.cardId);
+
+    if (!flippedCard) {
+      throw new Error("Card not found");
+    }
+
+    if (flippedCard.status !== "hidden") {
+      throw new Error("Card already flipped");
+    }
+
+    const alreadyFlippedCards = game.cards.filter(
+      (card) => card.status === "flipped"
+    );
+
+    if (alreadyFlippedCards.length >= 2) {
+      throw new Error("Please wait for the current flip to resolve");
+    }
+
+    const updatedCards = game.cards.map((card) => {
+      if (card.id === args.cardId) {
+        return { ...card, status: "flipped" as const };
+      }
+
+      return card;
+    });
+
+    await ctx.db.patch(args.gameId, {
+      cards: updatedCards,
+      updatedAt: Date.now(),
+    });
+
+    if (alreadyFlippedCards.length === 1) {
+      const firstCard = alreadyFlippedCards[0];
+      const secondCard = updatedCards.find((card) => card.id === args.cardId)!;
+
+      await ctx.scheduler.runAfter(3000, api.games.resolveFlip, {
+        gameId: args.gameId,
+        firstCardId: firstCard.id,
+        secondCardId: secondCard.id,
+        currentPlayerId: game.playerToPlay,
+      });
+    }
+  },
+});
+
+export const resolveFlip = mutation({
+  args: {
+    gameId: v.id("games"),
+    firstCardId: v.string(),
+    secondCardId: v.string(),
+    currentPlayerId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const game = await ctx.db.get(args.gameId);
+
+    if (!game) {
+      return;
+    }
+
+    const flippedCards = game.cards.filter(
+      (card) => card.id === args.firstCardId || card.id === args.secondCardId
+    );
+    const isMatch = flippedCards[0].value === flippedCards[1].value;
+
+    const updatedCards = game.cards.map((card) => {
+      if (card.id !== args.firstCardId && card.id !== args.secondCardId) {
+        return card;
+      }
+
+      return {
+        ...card,
+        status: isMatch ? ("matched" as const) : ("hidden" as const),
+      };
+    });
+
+    const gameStatus = updatedCards.every((card) => card.status === "matched")
+      ? "finished"
+      : "in_game";
+
+    const patch: Partial<typeof game> = {
+      cards: updatedCards,
+      status: gameStatus,
+      updatedAt: Date.now(),
+    };
+
+    const getPlayersPatch = () => {
+      const playersPatch: Partial<typeof game> = {};
+      if (isMatch) {
+        playersPatch.players = game.players.map((player) => {
+          if (player.id === args.currentPlayerId) {
+            return { ...player, score: player.score + 1 };
+          }
+
+          return player;
+        });
+
+        playersPatch.playerToPlay = args.currentPlayerId;
+        return playersPatch;
+      }
+
+      const currentPlayerIndex = game.players.findIndex(
+        (player) => player.id === args.currentPlayerId
+      );
+
+      if (currentPlayerIndex >= 0) {
+        const nextPlayer =
+          game.players[(currentPlayerIndex + 1) % game.players.length];
+        playersPatch.playerToPlay = nextPlayer.id;
+      }
+
+      return playersPatch;
+    };
+
+    const playersPatch = getPlayersPatch();
+    patch.players = playersPatch.players;
+    patch.playerToPlay = playersPatch.playerToPlay;
+
+    await ctx.db.patch(args.gameId, patch);
   },
 });

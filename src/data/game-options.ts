@@ -3,7 +3,7 @@ import type { SelectOption } from "@/components/ui/select";
 export const categoryOptions: SelectOption[] = [
   { value: "classic", label: "Classic Deck" },
   { value: "animals", label: "Animals" },
-  { value: "space", label: "Cosmic" },
+  { value: "cosmic", label: "Cosmic" },
   { value: "fruits", label: "Fruits" },
 ];
 

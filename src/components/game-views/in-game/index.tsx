@@ -1,30 +1,31 @@
 "use client";
 
 import { api } from "@convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 
 import { useUserId } from "@/lib/utils/user-id";
 import { cn } from "@/lib/utils/classname";
-
-const SAMPLE_CARDS = Array.from({ length: 48 }, (_, index) => ({
-  id: index,
-  label: String.fromCharCode(65 + (index % 24)),
-}));
+import Image from "next/image";
 
 export const InGameView = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const userId = useUserId();
 
   const game = useQuery(api.games.getGameByRoomCode, { roomCode });
+  const flipCard = useMutation(api.games.flipCard);
   if (!game) return null;
 
   const activePlayer = game.players.find(
     (player) => player.id === game.playerToPlay
   );
 
-  const onPlayCard = (card: string) => {
-    console.log(card);
+  const handleFlipCard = (cardId: string) => {
+    if (activePlayer?.id !== userId) {
+      return;
+    }
+
+    flipCard({ gameId: game._id, cardId });
   };
 
   return (
@@ -54,14 +55,35 @@ export const InGameView = () => {
             </div>
 
             <div className="grid gap-3 grid-cols-12">
-              {SAMPLE_CARDS.map((card) => (
-                <div
-                  key={card.id}
-                  className="flex size-28 aspect-square items-center justify-center rounded-3xl border border-white/25 bg-white/12 text-xl font-semibold uppercase tracking-[0.35em] text-white/85 shadow-[0_25px_80px_-45px_rgba(15,118,169,0.65)] transition duration-200 hover:border-white/40 hover:bg-white/20 hover:text-white"
-                >
-                  {card.label}
-                </div>
-              ))}
+              {game.cards.map((card) => {
+                return (
+                  <div key={card.id} className="relative size-28 aspect-square">
+                    <Image
+                      src={`/memory-sets/${game.category}/${card.value}.png`}
+                      alt={`Card ${card.id}`}
+                      width={112}
+                      height={112}
+                      className={cn(
+                        "flex absolute inset-0 size-28 aspect-square items-center justify-center rounded-3xl border border-white/25 bg-white/12 text-xl font-semibold uppercase tracking-[0.35em] text-white/85 shadow-[0_25px_80px_-45px_rgba(15,118,169,0.65)]",
+                        card.status === "flipped" || card.status === "matched"
+                          ? "opacity-100"
+                          : "opacity-0 pointer-events-none"
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        "absolute inset-0 size-28 aspect-square flex items-center justify-center border border-amber-400 hover:bg-amber-300 transition-colors cursor-pointer",
+                        card.status === "hidden"
+                          ? "opacity-100"
+                          : "opacity-0 pointer-events-none"
+                      )}
+                      onClick={() => handleFlipCard(card.id)}
+                    >
+                      🤔
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
