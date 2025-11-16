@@ -62,26 +62,33 @@ export const InGameView = () => {
 
             <div className="grid w-full place-content-center max-w-[1200px] gap-4 grid-cols-[repeat(8,minmax(110px,1fr))]">
               {game.cards.map((card) => {
+                const isRevealed =
+                  card.status === "flipped" || card.status === "matched";
+                const isInteractive = canFlipCard && card.status === "hidden";
+
                 return (
-                  <div key={card.id} className="relative aspect-square w-full">
+                  <div
+                    key={card.id}
+                    className="relative aspect-square w-full perspective-distant"
+                  >
                     <Image
                       src={`/memory-sets/${game.category}/${card.value}.png`}
                       alt={`Card ${card.id}`}
                       fill
                       className={cn(
-                        "rounded-xl transition-opacity border border-sky-700",
-                        card.status === "flipped" || card.status === "matched"
-                          ? "opacity-100"
-                          : "opacity-0 pointer-events-none"
+                        "rounded-3xl border border-sky-700 object-cover transition-transform duration-700 ease-out backface-hidden",
+                        isRevealed
+                          ? "transform-[rotateY(0deg)] shadow-[0_35px_65px_-35px_rgba(12,74,110,0.8)]"
+                          : "transform-[rotateY(180deg)] pointer-events-none shadow-[0_25px_55px_-45px_rgba(7,89,133,0.7)]"
                       )}
                     />
                     <div
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-sky-700 bg-sky-700/10 transition-colors",
-                        card.status === "hidden"
-                          ? "opacity-100"
-                          : "opacity-0 pointer-events-none",
-                        canFlipCard
+                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-sky-700 bg-sky-700/10 backdrop-blur-sm transition-transform duration-700 ease-out backface-hidden",
+                        isRevealed
+                          ? "transform-[rotateY(180deg)] pointer-events-none bg-sky-700/15"
+                          : "transform-[rotateY(0deg)]",
+                        isInteractive
                           ? "cursor-pointer hover:bg-sky-800/30"
                           : "cursor-default"
                       )}
