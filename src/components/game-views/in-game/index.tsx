@@ -22,8 +22,12 @@ export const InGameView = () => {
     (player) => player.id === game.playerToPlay
   );
 
+  const canFlipCard =
+    activePlayer?.id === userId &&
+    game.cards.filter((card) => card.status === "flipped").length < 2;
+
   const handleFlipCard = (cardId: string) => {
-    if (activePlayer?.id !== userId) {
+    if (!canFlipCard) {
       return;
     }
 
@@ -73,10 +77,13 @@ export const InGameView = () => {
                     />
                     <div
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-sky-700 bg-sky-700/10 text-3xl transition-colors hover:bg-sky-800/30 cursor-pointer",
+                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-sky-700 bg-sky-700/10 transition-colors",
                         card.status === "hidden"
                           ? "opacity-100"
-                          : "opacity-0 pointer-events-none"
+                          : "opacity-0 pointer-events-none",
+                        canFlipCard
+                          ? "cursor-pointer hover:bg-sky-800/30"
+                          : "cursor-default"
                       )}
                       onClick={() => handleFlipCard(card.id)}
                     >
