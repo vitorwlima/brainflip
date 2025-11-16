@@ -14,6 +14,7 @@ export const InGameView = () => {
 
   const game = useQuery(api.games.getGameByRoomCode, { roomCode });
   const flipCard = useMutation(api.games.flipCard);
+
   if (!game) return null;
 
   const activePlayer = game.players.find(
@@ -29,8 +30,8 @@ export const InGameView = () => {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-sky-300 via-sky-400 to-sky-600 text-sky-950">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full flex-col items-center justify-center ">
+    <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-sky-300 via-sky-400 to-sky-600 text-sky-950 p-2 md:p-4 lg:p-6">
+      <div className="relative z-10 mx-auto flex w-full flex-col items-center justify-center ">
         <section>
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -54,17 +55,16 @@ export const InGameView = () => {
               ) : null}
             </div>
 
-            <div className="grid gap-3 grid-cols-12">
+            <div className="grid w-full place-content-center max-w-[1200px] gap-4 grid-cols-[repeat(8,minmax(110px,1fr))]">
               {game.cards.map((card) => {
                 return (
-                  <div key={card.id} className="relative size-28 aspect-square">
+                  <div key={card.id} className="relative aspect-square w-full">
                     <Image
                       src={`/memory-sets/${game.category}/${card.value}.png`}
                       alt={`Card ${card.id}`}
-                      width={112}
-                      height={112}
+                      fill
                       className={cn(
-                        "flex absolute inset-0 size-28 aspect-square items-center justify-center rounded-3xl border border-white/25 bg-white/12 text-xl font-semibold uppercase tracking-[0.35em] text-white/85 shadow-[0_25px_80px_-45px_rgba(15,118,169,0.65)]",
+                        "rounded-xl transition-opacity",
                         card.status === "flipped" || card.status === "matched"
                           ? "opacity-100"
                           : "opacity-0 pointer-events-none"
@@ -72,7 +72,7 @@ export const InGameView = () => {
                     />
                     <div
                       className={cn(
-                        "absolute inset-0 size-28 aspect-square flex items-center justify-center border border-amber-400 hover:bg-amber-300 transition-colors cursor-pointer",
+                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-amber-400 bg-amber-300/10 text-3xl transition-colors hover:bg-amber-300/30 cursor-pointer",
                         card.status === "hidden"
                           ? "opacity-100"
                           : "opacity-0 pointer-events-none"

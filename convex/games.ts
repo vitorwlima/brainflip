@@ -285,9 +285,13 @@ export const resolveFlip = mutation({
       return playersPatch;
     };
 
-    const playersPatch = getPlayersPatch();
-    patch.players = playersPatch.players;
-    patch.playerToPlay = playersPatch.playerToPlay;
+    const { players, playerToPlay } = getPlayersPatch();
+    if (players) {
+      patch.players = players;
+    }
+    if (playerToPlay) {
+      patch.playerToPlay = playerToPlay;
+    }
 
     await ctx.db.patch(args.gameId, patch);
   },
