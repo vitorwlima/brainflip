@@ -10,6 +10,7 @@ type Props = {
 
 export const PageHeader = ({ roomCode }: Props) => {
   const [copiedType, setCopiedType] = useState<"code" | "link" | null>(null);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
 
   const handleCopy = async (value: string | null, type: "code" | "link") => {
     if (!value) {
@@ -75,12 +76,7 @@ export const PageHeader = ({ roomCode }: Props) => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() =>
-                handleCopy(
-                  `${process.env.NEXT_PUBLIC_HOST}/game/${roomCode}`,
-                  "link"
-                )
-              }
+              onClick={() => handleCopy(`${origin}/game/${roomCode}`, "link")}
             >
               <ButtonCheck show={copiedType === "link"}>
                 Copy Invite Link
