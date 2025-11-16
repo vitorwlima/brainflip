@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { useUserId } from "@/lib/utils/user-id";
 import { cn } from "@/lib/utils/classname";
 import Image from "next/image";
+import { LucideBrain } from "lucide-react";
 
 export const InGameView = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -64,7 +65,7 @@ export const InGameView = () => {
                       alt={`Card ${card.id}`}
                       fill
                       className={cn(
-                        "rounded-xl transition-opacity",
+                        "rounded-xl transition-opacity border border-sky-700",
                         card.status === "flipped" || card.status === "matched"
                           ? "opacity-100"
                           : "opacity-0 pointer-events-none"
@@ -72,14 +73,14 @@ export const InGameView = () => {
                     />
                     <div
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-amber-400 bg-amber-300/10 text-3xl transition-colors hover:bg-amber-300/30 cursor-pointer",
+                        "absolute inset-0 flex items-center justify-center rounded-3xl border border-sky-700 bg-sky-700/10 text-3xl transition-colors hover:bg-sky-800/30 cursor-pointer",
                         card.status === "hidden"
                           ? "opacity-100"
                           : "opacity-0 pointer-events-none"
                       )}
                       onClick={() => handleFlipCard(card.id)}
                     >
-                      🤔
+                      <LucideBrain className="text-sky-700 size-8 opacity-50" />
                     </div>
                   </div>
                 );
